@@ -20,14 +20,10 @@ Or install it yourself as:
 
 ## Usage
 
-Call `add_after_transition_commit_callback` inside your state machine to add the after transition commit callbacks.
-
-Anywhere you use `after_transition` you can replace with `after_transition_commit`:
+Anywhere you use `after_transition` you can replace with `after_transition_commit`. The block is registered on the open transaction and runs, with the record that transitioned, once the outermost transaction commits. If the transaction rolls back, the block is dropped. Outside a transaction, it runs immediately. Requires Active Record 7.2 or later.
 
 ```ruby
 state_machine :state, initial: :created do
-  add_after_transition_commit_callback
-
   state :created
   state :complete
 
@@ -40,6 +36,8 @@ state_machine :state, initial: :created do
   end
 end
 ```
+
+`add_after_transition_commit_callback` is no longer needed. It is kept as a no-op so existing state machines keep loading.
 
 ### Gotchas
 

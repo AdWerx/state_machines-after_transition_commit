@@ -23,5 +23,13 @@ class Cat < ApplicationRecord
     after_transition_commit asleep: :grumpy do |cat|
       cat.name = 'Grumpy Cat'
     end
+
+    after_transition_commit grumpy: :hungry do |cat|
+      Cat.committed_pets << cat
+    end
+  end
+
+  def self.committed_pets
+    @committed_pets ||= []
   end
 end
